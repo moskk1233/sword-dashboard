@@ -1,0 +1,7 @@
+{
+  "prefix": "swordMachineLearning",
+  "paths": {
+    "swordMachineLearning": "."
+  },
+  "translations": ["translations/ja-JP.json"]
+}
