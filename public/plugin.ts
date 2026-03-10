@@ -5,15 +5,21 @@ import {
   SwordMachineLearningPluginStart,
   AppPluginStartDependencies,
 } from './types';
-import { PLUGIN_NAME } from '../common';
+import { PLUGIN_NAME, PLUGIN_ID } from '../common';
 
 export class SwordMachineLearningPlugin
   implements Plugin<SwordMachineLearningPluginSetup, SwordMachineLearningPluginStart> {
   public setup(core: CoreSetup): SwordMachineLearningPluginSetup {
     // Register an application into the side navigation menu
     core.application.register({
-      id: 'swordMachineLearning',
+      id: PLUGIN_ID,
       title: PLUGIN_NAME,
+      category: {
+        id: PLUGIN_ID,
+        label: 'SWORD',
+        order: 1,
+        euiIconType: "dashboardApp"
+      },
       async mount(params: AppMountParameters) {
         // Load application bundle
         const { renderApp } = await import('./application');

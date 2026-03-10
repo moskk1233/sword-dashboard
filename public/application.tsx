@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppMountParameters, CoreStart } from '../../../src/core/public';
 import { AppPluginStartDependencies } from './types';
-import { SwordMachineLearningApp } from './components/app';
+import { SwordMachineLearningApp } from './pages/AttackPage';
 
 export const renderApp = (
   { notifications, http }: CoreStart,
