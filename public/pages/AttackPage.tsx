@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import {
@@ -7,6 +7,9 @@ import {
   EuiSpacer,
   EuiTitle,
   EuiCallOut,
+  EuiFlexGroup,
+  EuiButton,
+  EuiIcon,
 } from '@elastic/eui';
 
 import { CoreStart } from '../../../../src/core/public';
@@ -32,8 +35,9 @@ export const SwordMachineLearningApp = ({
   navigation,
 }: SwordMachineLearningAppDeps) => {
   // Filter state
-  const [startDate, setStartDate] = useState(moment().subtract(7, 'day'));
-  const [endDate, setEndDate] = useState(moment());
+  const [startDate, setStartDate] = useState(() => moment().subtract(7, 'day'));
+  const [endDate, setEndDate] = useState(() => moment());
+  const [lastUpdatedAt, setLastUpatedAt] = useState(() => moment().format("DD MMM YYYY - HH:mm:ss"));
 
   // Pagination state
   const [pageIndex, setPageIndex] = useState(0);
@@ -51,6 +55,8 @@ export const SwordMachineLearningApp = ({
   const [loadingTable, setLoadingTable] = useState(false);
   const [loadingTrend, setLoadingTrend] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const refreshIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const fetchTrend = async () => {
     setLoadingTrend(true);
@@ -97,15 +103,6 @@ export const SwordMachineLearningApp = ({
     }
   };
 
-  useEffect(() => {
-    fetchTrend();
-    fetchAttacks();
-  }, []);
-
-  useEffect(() => {
-    fetchAttacks();
-  }, [pageIndex, pageSize]);
-
   const onFilter = () => {
     setPageIndex(0);
     fetchTrend();
@@ -116,6 +113,39 @@ export const SwordMachineLearningApp = ({
     setPageIndex(page.index);
     setPageSize(page.size)
   };
+
+  const onRefreshClick = () => {
+    if (refreshIntervalRef.current) clearInterval(refreshIntervalRef.current);
+
+    fetchTrend();
+    fetchAttacks();
+    setLastUpatedAt(moment().format("DD MMM YYYY - HH:mm:ss"));
+
+    refreshIntervalRef.current = setInterval(() => {
+      fetchTrend();
+      fetchAttacks();
+      setLastUpatedAt(() => moment().format("DD MMM YYYY - HH:mm:ss"));
+    }, 5000);
+  }
+
+  useEffect(() => {
+    fetchTrend();
+    fetchAttacks();
+
+    refreshIntervalRef.current = setInterval(() => {
+      fetchTrend();
+      fetchAttacks();
+      setLastUpatedAt(() => moment().format("DD MMM YYYY - HH:mm:ss"));
+    }, 5000);
+
+    return () => {
+      if (refreshIntervalRef.current) clearInterval(refreshIntervalRef.current);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAttacks();
+  }, [pageIndex, pageSize]);
 
   return (
     <Router basename={basename}>
@@ -133,6 +163,7 @@ export const SwordMachineLearningApp = ({
           <FilterBar
             startDate={startDate}
             endDate={endDate}
+            lastUpdatedAtText={lastUpdatedAt}
             onStartDateChange={setStartDate}
             onEndDateChange={setEndDate}
             onFilter={onFilter}
@@ -141,7 +172,13 @@ export const SwordMachineLearningApp = ({
           <EuiSpacer size="l" />
 
           {/* Trend */}
-          <EuiTitle size="s"><h3>Attack Trend (Last 7 Days)</h3></EuiTitle>
+          <EuiFlexGroup alignItems="center" justifyContent="spaceBetween" style={{ padding: "20px 10px" }}>
+            <EuiTitle size="s"><h3>Attack Trend</h3></EuiTitle>
+            <EuiButton onClick={onRefreshClick}>
+              <EuiIcon type="refresh" />
+              Refresh
+            </EuiButton>
+          </EuiFlexGroup>
           <EuiSpacer size="s" />
           <AttackTrendChart
             trendData={trendData}
