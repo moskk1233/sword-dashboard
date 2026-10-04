@@ -1,10 +1,12 @@
-import { PluginInitializerContext } from '../../../src/core/server';
+import { PluginConfigDescriptor, PluginInitializerContext } from '../../../src/core/server';
+import { configSchema, SwordConfig } from './config';
 import { SwordMachineLearningPlugin } from './plugin';
 
-// This exports static code and TypeScript types,
-// as well as, OpenSearch Dashboards Platform `plugin()` initializer.
+export const config: PluginConfigDescriptor<SwordConfig> = {
+  schema: configSchema,
+};
 
-export function plugin(initializerContext: PluginInitializerContext) {
+export function plugin(initializerContext: PluginInitializerContext<SwordConfig>) {
   return new SwordMachineLearningPlugin(initializerContext);
 }
 

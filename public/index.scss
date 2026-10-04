@@ -1,1 +1,397 @@
-/* stylelint-disable no-empty-source */
+// SWORD Dashboard. Uses EUI theme variables so it follows the light / dark theme.
+$swordBrand: #2b34c7;
+$swordBrandDark: #1a1f8a;
+$swordBrandLight: #5865f2;
+
+.swordApp {
+  background: $euiPageBackgroundColor;
+  min-height: 100%;
+}
+
+.swordContent {
+  padding: $euiSizeL;
+  max-width: 1680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.swordCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.swordMono textarea,
+.swordMono input,
+textarea.swordMono,
+input.swordMono {
+  font-family: $euiCodeFontFamily;
+  font-size: $euiFontSizeS;
+}
+
+// ---------- Header ----------
+.swordHeader {
+  position: relative;
+  padding: $euiSizeL $euiSizeL 0;
+  color: #fff;
+  background: linear-gradient(120deg, $swordBrandDark 0%, $swordBrand 45%, $swordBrandLight 100%);
+  overflow: hidden;
+
+  &::after {
+    // subtle radar rings
+    content: '';
+    position: absolute;
+    right: -120px;
+    top: -160px;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    border: 40px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 0 60px rgba(255, 255, 255, 0.03);
+    pointer-events: none;
+  }
+
+  .euiText,
+  .euiButtonEmpty {
+    color: #fff;
+  }
+}
+
+.swordHeader__logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.swordHeader__title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.swordHeader__subtitle {
+  opacity: 0.8;
+}
+
+.swordHeader__user {
+  padding: 0 $euiSizeS;
+}
+
+.swordHeader__tabs {
+  margin-top: $euiSizeL;
+
+  &.euiTabs {
+    box-shadow: none;
+  }
+
+  .euiTab {
+    color: rgba(255, 255, 255, 0.75);
+    padding: $euiSizeS $euiSizeM;
+    border-radius: $euiBorderRadius $euiBorderRadius 0 0;
+
+    .euiIcon {
+      margin-right: 4px;
+    }
+
+    &:hover,
+    &:focus {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      text-decoration: none;
+    }
+
+    &.euiTab-isSelected {
+      color: $euiTextColor;
+      background: $euiPageBackgroundColor;
+      box-shadow: none;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+}
+
+// ---------- Panels ----------
+.swordFilterBar {
+  border-left: 4px solid $swordBrand;
+}
+
+.swordSection {
+  height: 100%;
+}
+
+.swordSection__body {
+  margin-top: $euiSizeM;
+}
+
+.swordKpi {
+  border-top: 3px solid transparent;
+  height: 100%;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.swordKpi--clickable {
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  }
+}
+
+.swordKpi__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swordKpi__title {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.swordKpi__value {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swordKpi__hint {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ---------- Charts ----------
+.swordDonut {
+  position: relative;
+}
+
+.swordDonut__center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.swordDonut__total {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.swordTypeList__row {
+  display: grid;
+  grid-template-columns: 12px minmax(80px, 1.2fr) 1fr 48px 40px;
+  gap: $euiSizeS;
+  align-items: center;
+  width: 100%;
+  padding: 6px $euiSizeS;
+  border-radius: $euiBorderRadius;
+  text-align: left;
+  color: $euiTextColor;
+  font-size: $euiFontSizeS;
+
+  &:hover {
+    background: $euiColorLightestShade;
+  }
+
+  &.isActive {
+    background: transparentize($swordBrand, 0.88);
+    font-weight: 600;
+  }
+}
+
+.swordTypeList__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.swordTypeList__label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.swordTypeList__bar {
+  height: 6px;
+  border-radius: 3px;
+  background: $euiColorLightShade;
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: 3px;
+  }
+}
+
+.swordTypeList__count {
+  text-align: right;
+  font-weight: 600;
+}
+
+.swordTypeList__pct {
+  text-align: right;
+  color: $euiTextSubduedColor;
+}
+
+// ---------- Lists ----------
+.swordList {
+  display: flex;
+  flex-direction: column;
+}
+
+.swordList__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $euiSizeS;
+  padding: $euiSizeS 0;
+  border-bottom: $euiBorderThin;
+  font-size: $euiFontSizeS;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.swordList__date {
+  min-width: 90px;
+  color: $euiTextSubduedColor;
+}
+
+.swordList__count {
+  font-weight: 600;
+}
+
+.swordList__muted {
+  color: $euiTextSubduedColor;
+  font-size: $euiFontSizeXS;
+  font-weight: normal;
+}
+
+.swordList__sig {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+// ---------- Table cells ----------
+.swordAttackBadge {
+  font-weight: 600;
+}
+
+.swordMeter {
+  display: flex;
+  align-items: center;
+  gap: $euiSizeS;
+  min-width: 110px;
+}
+
+.swordMeter__track {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: $euiColorLightShade;
+  overflow: hidden;
+}
+
+.swordMeter__fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.swordMeter__label {
+  font-variant-numeric: tabular-nums;
+  font-size: $euiFontSizeXS;
+  min-width: 32px;
+  text-align: right;
+}
+
+// ---------- Access control ----------
+.swordMatrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: $euiFontSizeS;
+
+  th {
+    text-align: left;
+    font-weight: 600;
+    padding: $euiSizeS;
+    border-bottom: 2px solid $euiColorLightShade;
+  }
+
+  td {
+    padding: $euiSizeS;
+    border-bottom: $euiBorderThin;
+  }
+
+  th:not(:first-child),
+  td:not(:first-child) {
+    text-align: center;
+    width: 140px;
+  }
+}
+
+// ---------- Password ----------
+.swordPasswordPage {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $euiSizeXL;
+  background: linear-gradient(160deg, transparentize($swordBrand, 0.85) 0%, transparent 60%);
+}
+
+.swordPasswordPage__card {
+  width: 100%;
+  max-width: 440px;
+}
+
+.swordPasswordPage__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: $euiSizeM;
+  background: linear-gradient(135deg, $swordBrand, $swordBrandLight);
+}
+
+.swordChecklist {
+  font-size: $euiFontSizeXS;
+  color: $euiTextSubduedColor;
+
+  li {
+    padding: 2px 0;
+  }
+
+  li.isOk {
+    color: $euiTextColor;
+  }
+}

@@ -1,46 +1,31 @@
-import { i18n } from '@osd/i18n';
 import { AppMountParameters, CoreSetup, CoreStart, Plugin } from '../../../src/core/public';
+import { PLUGIN_ID, PLUGIN_TITLE } from '../common';
 import {
+  AppPluginStartDependencies,
   SwordMachineLearningPluginSetup,
   SwordMachineLearningPluginStart,
-  AppPluginStartDependencies,
 } from './types';
-import { PLUGIN_NAME, PLUGIN_ID } from '../common';
 
 export class SwordMachineLearningPlugin
   implements Plugin<SwordMachineLearningPluginSetup, SwordMachineLearningPluginStart> {
   public setup(core: CoreSetup): SwordMachineLearningPluginSetup {
-    // Register an application into the side navigation menu
     core.application.register({
       id: PLUGIN_ID,
-      title: PLUGIN_NAME,
+      title: PLUGIN_TITLE,
+      euiIconType: 'securityAnalyticsApp',
       category: {
         id: PLUGIN_ID,
         label: 'SWORD',
         order: 1,
-        euiIconType: "dashboardApp"
+        euiIconType: 'securityAnalyticsApp',
       },
       async mount(params: AppMountParameters) {
-        // Load application bundle
         const { renderApp } = await import('./application');
-        // Get start services as specified in opensearch_dashboards.json
         const [coreStart, depsStart] = await core.getStartServices();
-        // Render the application
         return renderApp(coreStart, depsStart as AppPluginStartDependencies, params);
       },
     });
-
-    // Return methods that should be available to other plugins
-    return {
-      getGreeting() {
-        return i18n.translate('swordMachineLearning.greetingText', {
-          defaultMessage: 'Hello from {name}!',
-          values: {
-            name: PLUGIN_NAME,
-          },
-        });
-      },
-    };
+    return {};
   }
 
   public start(core: CoreStart): SwordMachineLearningPluginStart {
