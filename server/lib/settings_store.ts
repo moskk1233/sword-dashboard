@@ -3,6 +3,7 @@ import {
   DEFAULT_FCM_BODY,
   DEFAULT_FCM_TITLE,
   DashboardSettings,
+  FcmClientConfig,
   FcmSettings,
   SETTINGS_SO_ID,
   SETTINGS_SO_TYPE,
@@ -163,5 +164,32 @@ export class SettingsStore {
       overwrite: true,
     });
     return this.toPublic(next);
+  }
+
+  /** Public web-push bootstrap (web config + VAPID), safe for any SOC user's browser. */
+  async getWebPush(): Promise<FcmClientConfig> {
+    const { fcm } = await this.readStored();
+    const w = fcm.webConfig;
+    const configured = Boolean(
+      w?.apiKey && w?.projectId && w?.messagingSenderId && w?.appId && fcm.vapidKey
+    );
+    return { configured, webConfig: w, vapidKey: fcm.vapidKey };
+  }
+
+  /** Lets a SOC user self-register their browser's FCM token. No-op if the token already exists. */
+  async addDeviceToken(label: string, token: string): Promise<boolean> {
+    const stored = await this.readStored();
+    if (stored.fcm.deviceTokens.some((d) => d.token === token)) return false;
+    const next: StoredSettings = {
+      ...stored,
+      fcm: { ...stored.fcm, deviceTokens: [...stored.fcm.deviceTokens, { label, token }] },
+      updatedAt: new Date().toISOString(),
+      updatedBy: label,
+    };
+    await this.getRepository().create(SETTINGS_SO_TYPE, next, {
+      id: SETTINGS_SO_ID,
+      overwrite: true,
+    });
+    return true;
   }
 }

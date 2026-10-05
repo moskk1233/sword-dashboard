@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Redirect, Route, Router, Switch, useHistory, useLocation } from 'react-router-dom';
 import {
-  EuiButtonEmpty,
   EuiButtonIcon,
   EuiEmptyPrompt,
   EuiFlexGroup,
@@ -19,7 +18,7 @@ import { ScopedHistory } from '../../../src/core/public';
 import { CoreStart } from '../../../src/core/public';
 import { AccessInfo, DashboardSettings, PASSWORD_CHANGE_REQUIRED, PLUGIN_TITLE } from '../common';
 import { SwordApi, errorText } from './api';
-import { RoleBadge } from './components/common';
+import { FcmEnable } from './components/fcm_enable';
 import { useLiveAlerts } from './components/use_live_alerts';
 import { AgentsPage } from './pages/agents_page';
 import { ChangePasswordPage } from './pages/change_password_page';
@@ -88,6 +87,9 @@ const Header = ({
         <EuiFlexItem grow={false}>
           <EuiFlexGroup alignItems="center" gutterSize="s" responsive={false}>
             <EuiFlexItem grow={false}>
+              <FcmEnable core={ctx.core} api={ctx.api} />
+            </EuiFlexItem>
+            <EuiFlexItem grow={false}>
               <EuiToolTip
                 content={
                   desktopEnabled
@@ -104,26 +106,6 @@ const Header = ({
                 />
               </EuiToolTip>
             </EuiFlexItem>
-            <EuiFlexItem grow={false} className="swordHeader__user">
-              <EuiText size="s">
-                <EuiIcon type="user" /> <strong>{ctx.access.username}</strong>
-              </EuiText>
-            </EuiFlexItem>
-            <EuiFlexItem grow={false}>
-              <RoleBadge role={ctx.access.role} />
-            </EuiFlexItem>
-            {ctx.access.canChangePassword && (
-              <EuiFlexItem grow={false}>
-                <EuiButtonEmpty
-                  size="xs"
-                  color="ghost"
-                  iconType="lockOpen"
-                  onClick={() => history.push('/account')}
-                >
-                  Change password
-                </EuiButtonEmpty>
-              </EuiFlexItem>
-            )}
           </EuiFlexGroup>
         </EuiFlexItem>
       </EuiFlexGroup>
@@ -261,10 +243,6 @@ export const SwordApp = ({ core, history }: { core: CoreStart; history: ScopedHi
                   render={() => <SettingsPage ctx={ctx} onSaved={(s) => setUi(s.dashboard)} />}
                 />
               )}
-              <Route
-                path="/account"
-                render={() => <ChangePasswordPage core={core} api={api} access={access} />}
-              />
               <Redirect to="/overview" />
             </Switch>
           </div>

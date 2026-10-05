@@ -6,6 +6,7 @@ import {
   AgentsResponse,
   AttackResponse,
   DashboardSettings,
+  FcmClientConfig,
   NotifierStatus,
   SummaryResponse,
   SuricataResponse,
@@ -74,6 +75,14 @@ export class SwordApi {
     });
 
   notifierStatus = () => this.http.get<NotifierStatus>(`${API_BASE}/notifier/status`);
+
+  // ---- Web push (self-service for the current browser) ----
+  fcmConfig = () => this.http.get<FcmClientConfig>(`${API_BASE}/fcm/config`);
+
+  registerFcmDevice = (token: string, label?: string) =>
+    this.http.post<{ ok: boolean; added: boolean }>(`${API_BASE}/fcm/register-device`, {
+      body: JSON.stringify({ token, label }),
+    });
 
   accessOverview = () => this.http.get<AccessOverview>(`${API_BASE}/access/overview`);
 

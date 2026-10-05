@@ -30,6 +30,17 @@ const settingsPatch = schema.object({
           { maxSize: 50 }
         )
       ),
+      webConfig: schema.maybe(
+        schema.object({
+          apiKey: schema.string({ minLength: 1, maxLength: 200 }),
+          authDomain: schema.maybe(schema.string({ maxLength: 200 })),
+          projectId: schema.string({ minLength: 1, maxLength: 200 }),
+          storageBucket: schema.maybe(schema.string({ maxLength: 200 })),
+          messagingSenderId: schema.string({ minLength: 1, maxLength: 64 }),
+          appId: schema.string({ minLength: 1, maxLength: 200 }),
+        })
+      ),
+      vapidKey: schema.maybe(schema.string({ maxLength: 400 })),
       title: schema.maybe(schema.string({ minLength: 1, maxLength: 200 })),
       body: schema.maybe(schema.string({ minLength: 1, maxLength: 1000 })),
       cooldownSeconds: schema.maybe(cooldown),

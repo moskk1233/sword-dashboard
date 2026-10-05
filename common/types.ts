@@ -158,6 +158,16 @@ export interface FcmDeviceToken {
   token: string;
 }
 
+/** Firebase web app config — public values, embedded in the browser client (not secret). */
+export interface FcmWebConfig {
+  apiKey: string;
+  authDomain?: string;
+  projectId: string;
+  storageBucket?: string;
+  messagingSenderId: string;
+  appId: string;
+}
+
 export interface FcmSettings {
   enabled: boolean;
   /** Firebase service account JSON. Never returned by the API; see serviceAccountSet. */
@@ -166,11 +176,21 @@ export interface FcmSettings {
   projectId?: string;
   clientEmail?: string;
   deviceTokens: FcmDeviceToken[];
+  /** Web-push client registration (so SOC users can enable alerts in-browser). Public, non-secret. */
+  webConfig?: FcmWebConfig;
+  vapidKey?: string;
   title: string;
   body: string;
   cooldownSeconds: number;
   minConfidence: number;
   families: string[];
+}
+
+/** Web-push bootstrap sent to any SOC user so their browser can register for FCM. */
+export interface FcmClientConfig {
+  configured: boolean;
+  webConfig?: FcmWebConfig;
+  vapidKey?: string;
 }
 
 export interface DashboardSettings {

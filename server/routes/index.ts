@@ -5,6 +5,7 @@ import { Notifier } from '../lib/notifier';
 import { SettingsStore } from '../lib/settings_store';
 import { registerAccessRoutes } from './access';
 import { registerAttackRoutes } from './attacks';
+import { registerFcmRoutes } from './fcm';
 import { createGuard } from './guard';
 import { registerSettingsRoutes } from './settings';
 
@@ -20,4 +21,5 @@ export function defineRoutes(router: IRouter, deps: RouteDeps) {
   registerAttackRoutes(router, deps.config, guard);
   registerSettingsRoutes(router, guard, deps.settings, deps.notifier);
   registerAccessRoutes(router, deps.config, guard, deps.access);
+  registerFcmRoutes(router, guard, deps.settings);
 }

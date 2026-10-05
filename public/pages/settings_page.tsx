@@ -26,6 +26,7 @@ import {
   ATTACK_FAMILIES,
   ATTACK_FAMILY_KEYS,
   FcmDeviceToken,
+  FcmWebConfig,
   NotifierStatus,
   SAMPLE_ATTACK,
   SwordSettings,
@@ -200,6 +201,9 @@ export const SettingsPage = ({
 
   const fcm = form.fcm;
   const setFcm = (p: Partial<SwordSettings['fcm']>) => setForm({ ...form, fcm: { ...fcm, ...p } });
+  const web = fcm.webConfig;
+  const setWeb = (p: Partial<FcmWebConfig>) =>
+    setFcm({ webConfig: { ...(web ?? {}), ...p } as FcmWebConfig });
   const setDash = (p: Partial<SwordSettings['dashboard']>) =>
     setForm({ ...form, dashboard: { ...form.dashboard, ...p } });
 
@@ -296,6 +300,67 @@ export const SettingsPage = ({
                   {fcm.projectId} · {fcm.clientEmail}
                 </EuiText>
               }
+            />
+          </EuiFormRow>
+        </EuiDescribedFormGroup>
+
+        <EuiDescribedFormGroup
+          fullWidth
+          title={<h4>Browser registration (web push)</h4>}
+          description={
+            <>
+              Lets SOC users turn on alerts from their own browser with one click (the{' '}
+              <strong>Enable alerts</strong> button in the header). Paste the Firebase{' '}
+              <em>Web app config</em> and the <em>Web Push certificate (VAPID key)</em> — these are
+              public values, not secrets.
+            </>
+          }
+        >
+          <EuiFlexGroup gutterSize="s" wrap>
+            <EuiFlexItem style={{ minWidth: 220 }}>
+              <EuiFormRow label="apiKey" fullWidth>
+                <EuiFieldText
+                  fullWidth
+                  value={web?.apiKey ?? ''}
+                  onChange={(e) => setWeb({ apiKey: e.target.value })}
+                />
+              </EuiFormRow>
+            </EuiFlexItem>
+            <EuiFlexItem style={{ minWidth: 160 }}>
+              <EuiFormRow label="projectId" fullWidth>
+                <EuiFieldText
+                  fullWidth
+                  value={web?.projectId ?? ''}
+                  onChange={(e) => setWeb({ projectId: e.target.value })}
+                />
+              </EuiFormRow>
+            </EuiFlexItem>
+            <EuiFlexItem style={{ minWidth: 160 }}>
+              <EuiFormRow label="messagingSenderId" fullWidth>
+                <EuiFieldText
+                  fullWidth
+                  value={web?.messagingSenderId ?? ''}
+                  onChange={(e) => setWeb({ messagingSenderId: e.target.value })}
+                />
+              </EuiFormRow>
+            </EuiFlexItem>
+            <EuiFlexItem style={{ minWidth: 220 }}>
+              <EuiFormRow label="appId" fullWidth>
+                <EuiFieldText
+                  fullWidth
+                  value={web?.appId ?? ''}
+                  onChange={(e) => setWeb({ appId: e.target.value })}
+                />
+              </EuiFormRow>
+            </EuiFlexItem>
+          </EuiFlexGroup>
+          <EuiFormRow label="VAPID key (Web Push certificate)" fullWidth>
+            <EuiFieldText
+              fullWidth
+              value={fcm.vapidKey ?? ''}
+              onChange={(e) => setFcm({ vapidKey: e.target.value })}
+              placeholder="B..."
+              className="swordMono"
             />
           </EuiFormRow>
         </EuiDescribedFormGroup>
