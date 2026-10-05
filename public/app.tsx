@@ -21,7 +21,6 @@ import { AccessInfo, DashboardSettings, PASSWORD_CHANGE_REQUIRED, PLUGIN_TITLE }
 import { SwordApi, errorText } from './api';
 import { RoleBadge } from './components/common';
 import { useLiveAlerts } from './components/use_live_alerts';
-import { AccessPage } from './pages/access_page';
 import { AgentsPage } from './pages/agents_page';
 import { ChangePasswordPage } from './pages/change_password_page';
 import { OverviewPage } from './pages/overview_page';
@@ -53,7 +52,6 @@ const TABS: TabDef[] = [
     icon: 'bell',
     adminOnly: true,
   },
-  { id: 'access', path: '/access', name: 'Access Control', icon: 'lock', adminOnly: true },
 ];
 
 const Header = ({
@@ -263,7 +261,6 @@ export const SwordApp = ({ core, history }: { core: CoreStart; history: ScopedHi
                   render={() => <SettingsPage ctx={ctx} onSaved={(s) => setUi(s.dashboard)} />}
                 />
               )}
-              {isAdmin && <Route path="/access" render={() => <AccessPage ctx={ctx} />} />}
               <Route
                 path="/account"
                 render={() => <ChangePasswordPage core={core} api={api} access={access} />}

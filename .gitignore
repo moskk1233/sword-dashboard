@@ -1,3 +1,9 @@
 /build
 /target
 node_modules
+
+# FCM / Firebase secrets — never commit
+/firebase
+*firebase-adminsdk*.json
+*service*account*.json
+*.pdf
